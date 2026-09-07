@@ -118,8 +118,14 @@ Considérant que les systèmes de SimBuild sont segmenté de manière analogue �
 
 *Installation*
 
+Pour exfiltrer des clefs sur plusieurs lots de cartes SIM, l'attaquant doit maintenir un accès dans la durée, par exemple au niveau du client lourd relié à la base de données et aux serveurs bureautiques. Le cas SUNBURST (SolarWinds, 2020) illustre une installation particulièrement furtive : le backdoor était injecté dans une DLL signée du logiciel légitime, lui permettant de survivre aux mises à jour @cisa_aa20352a. Ces DLL frauduleux avaient pu être signé grace aux clef volées.
+
 *Command & Control*
 
+Le canal de contrôle doit rester discret pour échapper à une éventuelle supervision réseau. SUNBURST encodait ses communications dans des requêtes DNS imitant la télémétrie légitime de SolarWinds, avec des délais volontairement irréguliers pour déjouer l'analyse comportementale @securelist_sunburst_dns.
+
 *Action on Objective*
+
+Cette dernière étape correspond à l'objet même du cas d'étude : l'exfiltration des certificats privés de chiffrement des cartes SIM, déjà illustrée par le cas Gemalto cité plus haut #sym.arrow.r les clefs dérobées permettent d'intercepter le trafic mobile sans coopération des opérateurs @noauthor_nodate_gemalto.
 
 #bibliography("bibliography.bib", title: "References")

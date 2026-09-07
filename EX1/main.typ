@@ -236,43 +236,52 @@ To prevent unauthorized physical access, damage and interference to the organiza
 ]
 Le chapitre 7 entier est dédié à la sécurité physique et définit les recomendations quant aux points d'accès, visiteurs, livraisons, systèmes de surveillance, _etc_. 
 
-Cheval de Troie (USB)	7.10 Supports amovibles, 8.7 Protection contre malware	Oui
+*Cheval de Troie*
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+*7.10* _Storage media should be managed through their life cycle of acquisition, use, transportation and
+disposal in accordance with the organization’s classification scheme and handling requirements. [...]
+To ensure only authorized disclosure, modification, removal or destruction of information on storage media._
+]
+
+Le point *7.10* mentionne spécifiquement les supports de stockages comme les clefs USB. Le passage indique que les médias amovibles devraient être gérés dans leur cycle de vie entier par l'entreprise pour réduire le risque d'interférence externe. Point qui est rejoint par le chapitre *8.7* qui mentionne la protection contre les virus, les médias amovibles étant un vecteur conséquent.
+
+*Supply chain*
 #quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
 
 ]
-Supply chain (AUR/paquet vérolé)	5.19-5.22 Relations fournisseurs / ICT supply chain	Partiellement
-#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+Les chapitres *5.19* à *5.22* mentionnent la sécurité liée aux fournisseurs logiciels et les pratiques quant au monitoring de ces derniers ainsi que les contrats relevant du maintient et de la sécurité par les fournisseurs.
 
-]
-Interface web exposée	8.20 Sécurité réseau, 8.16 Surveillance	Oui
-#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
-
-]
 
 = Partie 4 - Cartographie MITRE ATT&CK
 
+La Cartographie MITRE ATT&CK présente une plus grande granularité par rapport au *kill-chain* de Lockeed-Martin.
+
+#figure(
+  image("navigator.png", width: 80%),
+  caption: "Matrice ATT&CK"
+)
 *Reconnaissance*
 
-Le ciblage de SimBuild correspond à la technique T1591 (Gather Victim Org Information) ; le repérage de services exposés via Shodan/nmap (cf. Partie 1) correspond à T1596.005 (Search Open Technical Databases: Scan Databases), mitigée par une segmentation réseau réduisant la surface visible depuis l'extérieur (M1030).
+Le ciblage de SimBuild correspond à la technique T1591 (Gather Victim Org Information) ; le repérage de services exposés via Shodan/nmap (cf. Partie 1) correspond à T1596.005 (Search Open Technical Databases: Scan Databases), ce qui peut ce mitiger par une segmentation du réseau (M1030) comme mentionné plus haut dans le rapport _Thalès_ avec l'analogie de l'oignon et de l'orange.
 
 *Initial Access*
 
-Selon le vecteur retenu en Partie 1, plusieurs techniques s'appliquent : le phishing de Gemalto correspond à T1566.001 (Spearphishing Attachment), la dépendance vérolée de l'AUR/MongoDB à T1195.001 (Compromise Software Dependencies), la clef USB de Stuxnet à T1091 (Replication Through Removable Media), et l'interface web exposée avec la CVE PostgreSQL à T1190 (Exploit Public-Facing Application) — mitigées respectivement par la sensibilisation (M1017), l'analyse de vulnérabilités (M1016), la limitation des supports amovibles (M1034) et la mise à jour des logiciels (M1051).
+Selon le vecteur retenu en Partie 1, plusieurs techniques peuvent s'appliquer : le phishing de Gemalto correspond à T1566.001 (Spearphishing Attachment), la dépendance vérolée de l'AUR/MongoDB à T1195.001 (Compromise Software Dependencies), la clef USB de Stuxnet à T1091 (Replication Through Removable Media), et l'interface web exposée avec la CVE PostgreSQL à T1190 (Exploit Public-Facing Application).
 
 *Execution*
 
-L'ouverture de la pièce jointe piégée par l'employé, commune aux Déroulés 1 et 2, correspond à T1204.002 (User Execution: Malicious File), mitigée par la sensibilisation des utilisateurs (M1017).
+L'ouverture de la pièce jointe piégée par l'employé correspond à T1204.002 (User Execution: Malicious File).
 
 *Persistence*
 
-L'installation d'une porte dérobée dans une DLL signée, à l'image de SUNBURST, correspond à T1554 (Compromise Host Software Binary). C'est ici que les deux déroulés divergent #sym.arrow.r dans le Déroulé 1, l'attaquant progresse jusqu'au client lourd relié à la base de données ; dans le Déroulé 2, la segmentation du réseau (M1030, architecture "onion and orange" de Gemalto) empêche cette persistance d'atteindre le système cible.
+L'installation d'une porte dérobée dans une DLL signée, à l'image de SUNBURST, correspond à T1554 (Compromise Host Software Binary).
 
 *Command & Control*
 
-Le canal DNS furtif de SUNBURST correspond à T1071.004 (Application Layer Protocol: DNS), détectable par une inspection réseau (M1031) — inutile dans le Déroulé 2 puisque l'attaquant n'a jamais atteint le segment protégé.
+Le canal DNS de SUNBURST correspond à T1071.004 (Application Layer Protocol: DNS) serait détectable par une inspection réseau (M1031).
 
 *Collection & Exfiltration*
 
-La récupération des clefs privées correspond à T1552.004 (Unsecured Credentials: Private Keys), suivie de leur exfiltration via le canal C2 (T1041, Exfiltration Over C2 Channel). Second point de divergence #sym.arrow.r si les clefs avaient été protégées par un HSM (M1041, Encrypt Sensitive Information), leur seule collecte n'aurait pas suffi à les rendre exploitables, ce qui bloque l'objectif final même en cas de compromission du système de stockage — le dénouement du Déroulé 2.
+La récupération des clefs privées correspond à T1552.004 (Unsecured Credentials: Private Keys).
 
 #bibliography("bibliography.bib", title: "References")

@@ -75,7 +75,7 @@ Plusieurs vecteurs d'attaque sont envisageable :
 - Cheval de Troie #sym.arrow.r un appareil compromis a put être distribué ou laissé près des lieux (ex: clef USB sur le parking, disque vérolé dans la supply-chain)
 \ \
 
-== Précédents historiques par vecteur
+== Précédents historiques
 
 *Phishing - Gemalto (2011)*
 
@@ -92,6 +92,27 @@ During the same period, we also detected several attempts to access the PCs of G
 ]
 
 La seconde partie semble indiquer que les attaquants aient eut un certain accès physique aux machines de l'entreprise. Cependant, ces machines n'étaient pas responsables des clefs de chiffrement et ne permettaient pas l'accès aux réseau sur lesquels ces machines se trouveraient. \ \
+
+Les documents Snowden publiés par _The Intercept_ vont plus loin que la version officielle de Gemalto : dès 2010, la NSA et le GCHQ avaient formé une unité dédiée, la *Mobile Handset Exploitation Team*, et repéré leurs cibles via X-KEYSCORE en épluchant les emails des employés @intercept_simheist_2015. \ \
+
+#quote(attribution:[GCHQ slide, via The Intercept @intercept_simheist_2015])[
+  _["we"] believe we have their entire network_]
+
+
+
+#figure(
+  image("gemalto-slide.webp", width: 60%),
+  caption: ""
+)
+La slide confidentielle du CGHQ mentionne également que les deux agences aient accès au serveurs de payement, aux serveurs de clef OTA et aux machines POS.
+
+#quote(attribution:[The Intercept @intercept_simheist_2015])[
+  _GCHQ also claimed the ability to manipulate the billing servers of cell companies to “suppress” charges in an effort to conceal the spy agency’s secret actions against an individual’s phone._]
+
+le journal #link("https://theintercept.com/2015/02/19/great-sim-heist/")[The Intercept] à publié un article très complet sur le sujet, d'où je tire une grande partie des informations de cette section. 
+
+
+*Belgacom (GCHQ, 2013)*  même unité, même méthode : de faux profils LinkedIn (_Quantum Insert_) ont piégé des ingénieurs réseau pour atteindre directement les routeurs gérant le trafic international, sans passer par le réseau bureautique @intercept_belgacom_2014, @enwiki:1359622831. \ \
 
 *Supply-chain - dépendances orphelines et paquets vérolés*
 
@@ -151,11 +172,11 @@ Dans le cas de Gemalto, les attaquants n'ont pas pu acceder aux systèmes critiq
 ]
 
 Considérant que les systèmes de SimBuild sont segmenté de manière analogue à Gemalto, il est raisonable de penser qu'une attaque similaire aurait les mêmes effets #sym.arrow.r l'attaquant reste cantonné au réseau bureautique.
-
+\
 *Installation*
 
 Sans accès aux machines portant les clefs de chiffrement, l'installation complète, conforme au plan (Reconnaissance) n'est pas possible. Cependant, il est toujours possible que les attaquants décident d'un nouvel objectif avec les machines déjà compromises (parc RH, Marketing, Administration, ...). Bien que moins sévère que les serveurs portant les clefs, une paralyze des machines peut entrainer de serieux ralentissements, et dans l'éventualité où des bases de données ou stockage de masse aient été compromis, les attaquants pourraient se rabattre sur un chiffrement des données. 
-
+\
 *Command & Control et Action on Objective*
 
 N'ayant pu obtenir les clefs, ces parties ne peuvent plus se jouer.
@@ -165,7 +186,7 @@ N'ayant pu obtenir les clefs, ces parties ne peuvent plus se jouer.
 La norme ISO/IEC 27002 est un document qui détaille les pratiques de sécurité des systèmes d'information. Publiée par ISO, l'Organisation Internationale de Standardisation, son but est de définir un standard que toutes les entreprises peuvent suivre afin d'uniformiser les notions de sécurités informatique (dans le cas de 27001/2, ISO publie d'autres document de standardisation dans tout les domaines industriels).
 \ 
 La norme ISO 27002 contient des recomandations quant au vecteurs d'attaque mentionnés plus haut. 
-
+\
 *Phishing*
 #quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
   *6.3* _The organization should identify, prepare and implement an appropriate training plan for technical
@@ -180,6 +201,14 @@ services is granted._
 ]
 Ces deux passages décrivent l'importance de former le personnel et de garder une liste d'accès restreinte pour limiter le rayon d'action d'un attaquant.
 
+Le cas Belgacom (cf. Partie 1) montre cependant une limite de ces deux points : l'ingénieur visé n'a commis aucune erreur, la fausse page LinkedIn interceptait sa connexion au niveau réseau (_Quantum Insert_) sans dépendre d'une action risquée de sa part. Formation (*6.3*) et authentification (*8.5*) ne suffisent donc pas seules face à ce type d'attaque ; il faudrait également surveiller/valider le trafic réseau sortant (cf. *8.20*).
+
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+  *8.20* _Networks and network devices should be secured, managed and controlled to protect information in systems and applications.
+[...]
+To protect information in networks and its supporting information processing facilities from compromise via the network._
+]
+
 \
 
 *Vulnérabilité* (CVE non patché)
@@ -187,8 +216,8 @@ Ces deux passages décrivent l'importance de former le personnel et de garder un
   *8.8* _Information about technical vulnerabilities of information systems in use should be obtained, the
 organization’s exposure to such vulnerabilities should be evaluated and appropriate measures should
 be taken._
-
 ]
+\
 *Inside-Job*
 #quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
   *5.15* _Rules to control physical and logical access to information and other associated assets should be
@@ -236,6 +265,7 @@ To prevent unauthorized physical access, damage and interference to the organiza
 ]
 Le chapitre 7 entier est dédié à la sécurité physique et définit les recomendations quant aux points d'accès, visiteurs, livraisons, systèmes de surveillance, _etc_. 
 
+\
 *Cheval de Troie*
 #quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
 *7.10* _Storage media should be managed through their life cycle of acquisition, use, transportation and
@@ -245,6 +275,7 @@ To ensure only authorized disclosure, modification, removal or destruction of in
 
 Le point *7.10* mentionne spécifiquement les supports de stockages comme les clefs USB. Le passage indique que les médias amovibles devraient être gérés dans leur cycle de vie entier par l'entreprise pour réduire le risque d'interférence externe. Point qui est rejoint par le chapitre *8.7* qui mentionne la protection contre les virus, les médias amovibles étant un vecteur conséquent.
 
+\
 *Supply chain*
 #quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
 

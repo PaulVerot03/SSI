@@ -56,16 +56,9 @@ During the same period, we also detected several attempts to access the PCs of G
 
 https://www.thalesgroup.com/en/news-centre/press-releases/gemalto-presents-findings-its-investigations-alleged-hacking-sim-card
 
-La seconde partie semble indiquer que les attaquants aient eut un certain accès physique aux machines de l'entreprise. Cependant, ces machines n'étaient pas responsables des clefs de chiffrement et ne permettaient pas l'accès aux réseau sur lesquels ces machines se trouveraient. 
-
-Mais on peut imaginer d'autres vecteurs d'attaque : 
-
 Dans une _supply chain attack_, un composant logiciel ou matériel est compromis avant d'arriver dans les systèmes. On peut imaginer q'une dépendance logiciel orphanée ait été employée par les attaquant, comme dans les attaques sur le **Arch Linux User Repository** en 2026, ou des paquets orphanés avait été adopté par des acteurs malveillant afin de d'y integrer des _info-stealer_.
 
-On peut imaginer qu'une dépendance pour une ancienne version d'un Moteur de Base de Donnée ait été utilisée (ie. MongoDB vers.1).
+Pour les besoins de l'exercices, on imaginera qu'une dépendance pour une ancienne version d'un Moteur de Base de Donnée ait été utilisée (ie. MongoDB vers.1).
 Ce paquet vérolé, si intégré dans un dépôt de paquet (ie. rpm-fusion, terra, cid) aurait pu être installer avec une simple mise à jour du système.
 
-Le système aurait pu être visé si par exemple une interface web comme cockpit ou arrangoWebUI avait été exposé au web. Un moteur de recherche comme Shodan permet d'identifier des machines sur le web (par exemple avec les favico qui possèdent un hash unique). Une analyse avec nmap pourrait réveller des ports exposés, et ainsi donner des indices sur le type de moteur de bases de données (27017 -> mongodb, 51413 -> arrangodb, 5985 -> couchdb). Une analyse plus poussée sur ces port permet dans certains cas d'obtenir des informations cruciales sur l'état du moteur de BDD. Par exemple, Miscrosoft SQL envéra le numéro de build avec un handshake TDS, et dans certains cas une liste complète des instances installées avec leurs port respectif. Une fois la version du logiciel connue, elle peut être cross-référencée avec des bases de données de vulnérabilité (CVE). 
-Par exemple en 2017 sur PostgreSQL avec : 
-_PostgreSQL versions before 9.2.22, 9.3.18, 9.4.13, 9.5.8 and 9.6.4 are vulnerable to incorrect authentication flaw allowing remote attackers to gain access to database accounts with an empty password._
-CVE-2017-7546
+Le système aurait pu être visé si par exemple une interface web comme cockpit ou arrangoWebUI avait été exposé au web. Un moteur de recherche comme Shodan permet d'identifier des machines sur le web (par exemple avec les favico qui possèdent un hash unique). Une analyse avec nmap pourrait réveller des ports exposés, et ainsi donner des indices sur le type de moteur de bases de données. Une analyse plus poussée sur les

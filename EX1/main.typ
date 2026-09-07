@@ -166,17 +166,113 @@ La norme ISO/IEC 27002 est un document qui détaille les pratiques de sécurité
 \ 
 La norme ISO 27002 contient des recomandations quant au vecteurs d'attaque mentionnés plus haut. 
 
-Phishing	*6.3*, *8.5* Education and training
-The organization should identify, prepare and implement an appropriate training plan for technical
-teams whose roles require specific skill sets and expertise. Technical teams sho
+*Phishing*
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+  *6.3* _The organization should identify, prepare and implement an appropriate training plan for technical
+teams whose roles require specific skill sets and expertise. Technical teams should have the skills for
+configuring and maintaining the required security level for devices, systems, applications and services.
+If there are missing skills, the organization should take action and acquire them._ \
+*8.5* _Secure authentication technologies and procedures should be implemented based on information
+access restrictions and the topic-specific policy on access control.
+[...]
+To ensure a user or an entity is securely authenticated, when access to systems, applications and
+services is granted._
+]
+Ces deux passages décrivent l'importance de former le personnel et de garder une liste d'accès restreinte pour limiter le rayon d'action d'un attaquant.
+
+\
+
+*Vulnérabilité* (CVE non patché)
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+  *8.8* _Information about technical vulnerabilities of information systems in use should be obtained, the
+organization’s exposure to such vulnerabilities should be evaluated and appropriate measures should
+be taken._
+
+]
+*Inside-Job*
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+  *5.15* _Rules to control physical and logical access to information and other associated assets should be
+established and implemented based on business and information security requirements._ \
+*Purpose* \
+_To ensure authorized access and to prevent unauthorized access to information and other associated
+assets._\
+*Guidance* \
+_Owners of information and other associated assets should determine information security and business
+requirements related to access control. A topic-specific policy on access control should be defined which
+takes account of these requirements and should be communicated to all relevant interested parties.
+These requirements and the topic-specific policy should consider the following:
+a)determining which entities require which type of access to the information and other associated
+assets;
+c)physical access, which needs to be supported by appropriate physical entry controls (see 7.2, 7.3,
+7.4);
+e)restrictions to privileged access (see 8.2);
+[...]
+d) information dissemination and authorization (e.g. the need-to-know principle) and information
+security levels and classification of information (see 5.10, 5.12, 5.13);
+f)
+segregation of duties (see 5.3);
+[...]
+i)formal authorization of access requests (see 5.16 and 5.18);
+the management of access right_
+]
+Ce passage souligne l'importance de liste de contrôle d'accès pour les personnels de l'entrprise. Il est également souligné l'importance de la ségrégation/séparation des tâches et des accès aux information (_need to know basis_ et _security by obscurity_).
+
+Un autre passage interssant sur le sujet est le point *6.4* qui mentionne les processus diciplinaire en cas de tort. 
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+  *6.4* _A disciplinary process should be formalized and communicated to take actions against personnel and
+other relevant interested parties who have committed an information security policy violation.
+Purpose
+To ensure personnel and other relevant interested parties understand the consequences of information
+security policy violation, to deter and appropriately deal with personnel and other relevant interested parties who committed the violation._
+]
 
 
-Sensibilisation, 8.5 Authentification sécurisée	Partiellement
-Vulnérabilité (CVE non patché)	8.8 Gestion des vulnérabilités techniques	Oui si appliquée
-Inside-Job	5.15 Contrôle d'accès, 6.4 Processus disciplinaire	Partiellement
-Intrusion physique	7.x Sécurité physique	Oui
+*Intrusion physique*
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+*7* _Security perimeters should be defined and used to protect areas that contain information and other
+associated assets.
+Purpose
+To prevent unauthorized physical access, damage and interference to the organization’s information and other associated assets._
+]
+Le chapitre 7 entier est dédié à la sécurité physique et définit les recomendations quant aux points d'accès, visiteurs, livraisons, systèmes de surveillance, _etc_. 
+
 Cheval de Troie (USB)	7.10 Supports amovibles, 8.7 Protection contre malware	Oui
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+
+]
 Supply chain (AUR/paquet vérolé)	5.19-5.22 Relations fournisseurs / ICT supply chain	Partiellement
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+
+]
 Interface web exposée	8.20 Sécurité réseau, 8.16 Surveillance	Oui
+#quote(attribution: [ISO/IEC:27002 @iso27002_2022])[
+
+]
+
+= Partie 4 - Cartographie MITRE ATT&CK
+
+*Reconnaissance*
+
+Le ciblage de SimBuild correspond à la technique T1591 (Gather Victim Org Information) ; le repérage de services exposés via Shodan/nmap (cf. Partie 1) correspond à T1596.005 (Search Open Technical Databases: Scan Databases), mitigée par une segmentation réseau réduisant la surface visible depuis l'extérieur (M1030).
+
+*Initial Access*
+
+Selon le vecteur retenu en Partie 1, plusieurs techniques s'appliquent : le phishing de Gemalto correspond à T1566.001 (Spearphishing Attachment), la dépendance vérolée de l'AUR/MongoDB à T1195.001 (Compromise Software Dependencies), la clef USB de Stuxnet à T1091 (Replication Through Removable Media), et l'interface web exposée avec la CVE PostgreSQL à T1190 (Exploit Public-Facing Application) — mitigées respectivement par la sensibilisation (M1017), l'analyse de vulnérabilités (M1016), la limitation des supports amovibles (M1034) et la mise à jour des logiciels (M1051).
+
+*Execution*
+
+L'ouverture de la pièce jointe piégée par l'employé, commune aux Déroulés 1 et 2, correspond à T1204.002 (User Execution: Malicious File), mitigée par la sensibilisation des utilisateurs (M1017).
+
+*Persistence*
+
+L'installation d'une porte dérobée dans une DLL signée, à l'image de SUNBURST, correspond à T1554 (Compromise Host Software Binary). C'est ici que les deux déroulés divergent #sym.arrow.r dans le Déroulé 1, l'attaquant progresse jusqu'au client lourd relié à la base de données ; dans le Déroulé 2, la segmentation du réseau (M1030, architecture "onion and orange" de Gemalto) empêche cette persistance d'atteindre le système cible.
+
+*Command & Control*
+
+Le canal DNS furtif de SUNBURST correspond à T1071.004 (Application Layer Protocol: DNS), détectable par une inspection réseau (M1031) — inutile dans le Déroulé 2 puisque l'attaquant n'a jamais atteint le segment protégé.
+
+*Collection & Exfiltration*
+
+La récupération des clefs privées correspond à T1552.004 (Unsecured Credentials: Private Keys), suivie de leur exfiltration via le canal C2 (T1041, Exfiltration Over C2 Channel). Second point de divergence #sym.arrow.r si les clefs avaient été protégées par un HSM (M1041, Encrypt Sensitive Information), leur seule collecte n'aurait pas suffi à les rendre exploitables, ce qui bloque l'objectif final même en cas de compromission du système de stockage — le dénouement du Déroulé 2.
 
 #bibliography("bibliography.bib", title: "References")

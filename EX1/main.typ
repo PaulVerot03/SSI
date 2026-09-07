@@ -62,11 +62,11 @@ Expliquez si les services ISO 27002 étudiés en cours auraient permis (ou pas) 
 = Partie 1 - Intrusion
 
 == Partie une, vecteur d'attaque :
-[Reconnaissance #sym.arrow.r Delivery]
+*Reconnaissance*
 
 La distribution et le contrôle de carte SIM étant primordial pour la telecom d'un pays ou d'une région, et étant donnée l'omnipresance d'appareils cellulaire sur un terittoire donné ; la prise de contrôle de la ligne de production peut être très avantageuse à des fins lucratives ou de renseignement.
 
-
+*Weaponizing*
 
 Plusieurs vecteurs d'attaque sont envisageable :
 - Phishing #sym.arrow.r un des employé avec permission sur le système s'est fait compromettre
@@ -75,6 +75,7 @@ Plusieurs vecteurs d'attaque sont envisageable :
 - Intrusion physique #sym.arrow.r un acteur malveillant ai put avoir accès physiquement aux système (faille de sécurité sur site)
 - Cheval de Troie #sym.arrow.r un appareil compromis a put être distribué ou laissé près des lieux (ex: clef USB sur le parking, disque vérolé dans la supply-chain)
 \ \
+*Delivery*
 Le cas d'étude est similaire au piratage de l'entrprise GEMALTO en 2011. Où plusieurs agences gouvernementales, notamment la National Security Agency (EUA) et le Government Communications Headquarters (UK), se sont introduits dans les systèmes de l'entreprise Gemalto, fabricant des cartes SIM pour plus de 450 opérateurs telecoms dans le monde. Les attaquant avaient pour but de saisir les clef de chiffrements afin de pouvoir plus facillement espionner les échanges entre utilisateurs sur les réseaux cellulaires supposément.
 
 #quote(attribution:[ Gemalto presents the findings of its investigations into the alleged hacking @noauthor_nodate_gemalto])[
@@ -107,6 +108,18 @@ Par exemple en 2017 sur PostgreSQL avec :
 #quote(attribution:[CVE-2017-7546 @noauthor_nodate_cve20177546])[
   _PostgreSQL versions before 9.2.22, 9.3.18, 9.4.13, 9.5.8 and 9.6.4 are vulnerable to incorrect authentication flaw allowing remote attackers to gain access to database accounts with an empty password._]
 
+*Exploitation*
+Dans le cas de Gemalto, les attaquants n'ont pas pu acceder aux systèmes critiques. Ce dû à leur architecture réseau :
+#quote(attribution: [Gemalto presents the findings of its investigations into the alleged hacking @noauthor_nodate_gemalto])[
+  _These intrusions only affected the outer parts of our networks – our office networks - which are in contact with the outside world. The SIM encryption keys and other customer data in general, are not stored on these networks. It is important to understand that our network architecture is designed like a cross between an onion and an orange; it has multiple layers and segments which help to cluster and isolate data._
+]
 
+Considérant que les systèmes de SimBuild sont segmenté de manière analogue à Gemalto, il est raisonable de penser qu'une attaque similaire aurait les mêmes effets.
+
+*Installation*
+
+*Command & Control*
+
+*Action on Objective*
 
 #bibliography("bibliography.bib", title: "References")

@@ -44,6 +44,10 @@
 
 )
 
+
+#set heading(numbering: "1.")
+#show: mainmatter.with(skip-double: false)
+#outline()
 = Contexte :
 
 L’entreprise SimBuild est spécialisée dans la production de cartes SIM pour différents opérateurs téléphoniques. Elle s'est faite dérober les certificats privés de cryptage de ses cartes par une agence d’espionnage d'un grand pays. Ceci a permis à ce pays de récupérer des informations sur toutes les communications passées par des téléphones portables utilisant ces cartes SIM.
@@ -124,6 +128,7 @@ le journal #link("https://theintercept.com/2015/02/19/great-sim-heist/")[The Int
 
 *Belgacom (GCHQ, 2013)*  même unité, même méthode : de faux profils LinkedIn (_Quantum Insert_) ont piégé des ingénieurs réseau pour atteindre directement les routeurs gérant le trafic international, sans passer par le réseau bureautique @intercept_belgacom_2014, @enwiki:1359622831. \ \
 
+== Méthodes communes d'attaque
 *Supply-chain - dépendances orphelines et paquets vérolés*
 
 Dans une _supply chain attack_, un composant logiciel ou matériel est compromis avant d'arriver dans les systèmes. On peut imaginer q'une dépendance logiciel orphanée ait été employée par les attaquant, comme dans les attaques sur le _Arch Linux User Repository_ en 2026, où des paquets orphanés avait été adoptés par des acteurs malveillants afin de d'y intégrer des _info-stealer_. \ \
@@ -145,7 +150,7 @@ Par exemple en 2017 sur PostgreSQL avec :
   _PostgreSQL versions before 9.2.22, 9.3.18, 9.4.13, 9.5.8 and 9.6.4 are vulnerable to incorrect authentication flaw allowing remote attackers to gain access to database accounts with an empty password._]
 
 
-= Partie 2 - 2 hypothèses différents
+= Partie 2 - 2 hypothèses différentes
 == Déroulé 1 - attaque réussie
 
 *Reconnaissance, Weaponizing & Delivery*
@@ -326,4 +331,4 @@ Les chapitres *5.19* à *5.22* mentionnent la sécurité liée aux fournisseurs 
 
 
 
-#bibliography("bibliography.bib", title: "References")
+#bibliography("bibliography.bib", title: "References", full:true)

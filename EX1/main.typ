@@ -37,7 +37,7 @@
   fr: (
     title: "Étude des services ISO 27002",
     theme: "Sécurité des Systèmes d'Information",
-    abstract: "",
+    abstract: "Étude d'une attaque sur une entreprise fictive de fabrication de carte sim. Ce document présentera une analyse de la kill-chain et de la matrice MITRE ATT&CK, ainsi que deux déroulés éventuels pour illustrer différentes attaques et défense. Finnalement, le document présentera les recommendation de la norme ISO 27002 relevant des événements évoqué dans les premières parties.",
   ),
 
   // clear-double-page: false,
@@ -59,6 +59,18 @@ Le processus d'inscription des données sensibles se décompose en trois activit
 Proposez des schémas d'attaque "kill chain" ou MITRE ATT&CK ayant permis la réalisation de l'attaque.
 Expliquez si les services ISO 27002 étudiés en cours auraient permis (ou pas) de protéger l'entreprise.
 
+= Introduction
+Il existe deux métrique principales pour évaluer et annoter les attaques informatiques.
+la *cyber kill-chain* maintenues par Lokheed-Martin, adaptée du concept de kill-chain dans la sécurité d'information militaire @enwiki:1328454437. 
+#figure(
+  image("kill-chain.png", width:80%),
+  caption: "Illustration de la kill-chain par Lokheed-Martin"
+)
+Et la Matrice maintenue par *MITRE ATT&CK* (Adversarial Tactics, Techniques, and Common Knowledge) @enwiki:1362489664, dont l'objectif et de donner une défnition et identification  commune des méthode adversaire et de défense.  
+#figure(
+  image("navigator.png", width: 80%),
+  caption: "Matrice ATT&CK"
+)
 = Partie 1 - Vecteurs d'attaque envisageables
 
 *Reconnaissance*
@@ -97,8 +109,6 @@ Les documents Snowden publiés par _The Intercept_ vont plus loin que la version
 
 #quote(attribution:[GCHQ slide, via The Intercept @intercept_simheist_2015])[
   _["we"] believe we have their entire network_]
-
-
 
 #figure(
   image("gemalto-slide.webp", width: 60%),
@@ -181,7 +191,39 @@ Sans accès aux machines portant les clefs de chiffrement, l'installation compl�
 
 N'ayant pu obtenir les clefs, ces parties ne peuvent plus se jouer.
 
-= Partie 3 - Normes ISO 27001/2
+= Partie 3 - Cartographie MITRE ATT&CK
+
+La Cartographie MITRE ATT&CK présente une plus grande granularité par rapport à la *kill-chain* de Lockeed-Martin.
+
+
+*Reconnaissance*
+
+Le ciblage de SimBuild correspond à la technique T1591 (Gather Victim Org Information) ; le repérage de services exposés via Shodan/nmap (cf. Partie 1) correspond à T1596.005 (Search Open Technical Databases: Scan Databases), ce qui peut ce mitiger par une segmentation du réseau (M1030) comme mentionné plus haut dans le rapport _Thalès_ avec l'analogie de l'oignon et de l'orange.
+
+*Initial Access*
+
+Selon le vecteur retenu en Partie 1, plusieurs techniques peuvent s'appliquer : le phishing de Gemalto correspond à T1566.001 (Spearphishing Attachment), la dépendance vérolée de l'AUR/MongoDB à T1195.001 (Compromise Software Dependencies), la clef USB de Stuxnet à T1091 (Replication Through Removable Media), et l'interface web exposée avec la CVE PostgreSQL à T1190 (Exploit Public-Facing Application).
+
+*Execution*
+
+L'ouverture de la pièce jointe piégée par l'employé correspond à T1204.002 (User Execution: Malicious File).
+
+*Persistence*
+
+L'installation d'une porte dérobée dans une DLL signée, à l'image de SUNBURST, correspond à T1554 (Compromise Host Software Binary).
+
+*Command & Control*
+
+Le canal DNS de SUNBURST correspond à T1071.004 (Application Layer Protocol: DNS) serait détectable par une inspection réseau (M1031).
+
+*Collection & Exfiltration*
+
+La récupération des clefs privées correspond à T1552.004 (Unsecured Credentials: Private Keys).
+
+
+
+
+= Partie 4 - Normes ISO 27001/2
 
 La norme ISO/IEC 27002 est un document qui détaille les pratiques de sécurité des systèmes d'information. Publiée par ISO, l'Organisation Internationale de Standardisation, son but est de définir un standard que toutes les entreprises peuvent suivre afin d'uniformiser les notions de sécurités informatique (dans le cas de 27001/2, ISO publie d'autres document de standardisation dans tout les domaines industriels).
 \ 
@@ -283,36 +325,5 @@ Le point *7.10* mentionne spécifiquement les supports de stockages comme les cl
 Les chapitres *5.19* à *5.22* mentionnent la sécurité liée aux fournisseurs logiciels et les pratiques quant au monitoring de ces derniers ainsi que les contrats relevant du maintient et de la sécurité par les fournisseurs.
 
 
-= Partie 4 - Cartographie MITRE ATT&CK
-
-La Cartographie MITRE ATT&CK présente une plus grande granularité par rapport au *kill-chain* de Lockeed-Martin.
-
-#figure(
-  image("navigator.png", width: 80%),
-  caption: "Matrice ATT&CK"
-)
-*Reconnaissance*
-
-Le ciblage de SimBuild correspond à la technique T1591 (Gather Victim Org Information) ; le repérage de services exposés via Shodan/nmap (cf. Partie 1) correspond à T1596.005 (Search Open Technical Databases: Scan Databases), ce qui peut ce mitiger par une segmentation du réseau (M1030) comme mentionné plus haut dans le rapport _Thalès_ avec l'analogie de l'oignon et de l'orange.
-
-*Initial Access*
-
-Selon le vecteur retenu en Partie 1, plusieurs techniques peuvent s'appliquer : le phishing de Gemalto correspond à T1566.001 (Spearphishing Attachment), la dépendance vérolée de l'AUR/MongoDB à T1195.001 (Compromise Software Dependencies), la clef USB de Stuxnet à T1091 (Replication Through Removable Media), et l'interface web exposée avec la CVE PostgreSQL à T1190 (Exploit Public-Facing Application).
-
-*Execution*
-
-L'ouverture de la pièce jointe piégée par l'employé correspond à T1204.002 (User Execution: Malicious File).
-
-*Persistence*
-
-L'installation d'une porte dérobée dans une DLL signée, à l'image de SUNBURST, correspond à T1554 (Compromise Host Software Binary).
-
-*Command & Control*
-
-Le canal DNS de SUNBURST correspond à T1071.004 (Application Layer Protocol: DNS) serait détectable par une inspection réseau (M1031).
-
-*Collection & Exfiltration*
-
-La récupération des clefs privées correspond à T1552.004 (Unsecured Credentials: Private Keys).
 
 #bibliography("bibliography.bib", title: "References")

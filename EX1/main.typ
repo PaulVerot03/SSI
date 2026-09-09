@@ -65,7 +65,7 @@ Expliquez si les services ISO 27002 étudiés en cours auraient permis (ou pas) 
 
 = Introduction
 Il existe deux métrique principales pour évaluer et annoter les attaques informatiques.
-la *cyber kill-chain* maintenues par Lokheed-Martin, adaptée du concept de kill-chain dans la sécurité d'information militaire @enwiki:1328454437. 
+la *cyber kill-chain* maintenues par Lokheed-Martin, adaptée du concept de kill-chain dans la sécurité d'information militaire. @enwiki:1328454437
 #figure(
   image("kill-chain.png", width:80%),
   caption: "Illustration de la kill-chain par Lokheed-Martin"
@@ -109,7 +109,7 @@ During the same period, we also detected several attempts to access the PCs of G
 
 La seconde partie semble indiquer que les attaquants aient eut un certain accès physique aux machines de l'entreprise. Cependant, ces machines n'étaient pas responsables des clefs de chiffrement et ne permettaient pas l'accès aux réseau sur lesquels ces machines se trouveraient. \ \
 
-Les documents Snowden publiés par _The Intercept_ vont plus loin que la version officielle de Gemalto : dès 2010, la NSA et le GCHQ avaient formé une unité dédiée, la *Mobile Handset Exploitation Team*, et repéré leurs cibles via X-KEYSCORE en épluchant les emails des employés @intercept_simheist_2015. \ \
+Les documents Snowden publiés par _The Intercept_ vont plus loin que la version officielle de Gemalto : dès 2010, la NSA et le GCHQ avaient formé une unité dédiée, la *Mobile Handset Exploitation Team*, et repéré leurs cibles via X-KEYSCORE en épluchant les emails des employés. @intercept_simheist_2015 \ \
 
 #quote(attribution:[GCHQ slide, via The Intercept @intercept_simheist_2015])[
   _["we"] believe we have their entire network_]
@@ -126,7 +126,7 @@ La slide confidentielle du CGHQ mentionne également que les deux agences aient 
 le journal #link("https://theintercept.com/2015/02/19/great-sim-heist/")[The Intercept] à publié un article très complet sur le sujet, d'où je tire une grande partie des informations de cette section. 
 
 
-*Belgacom (GCHQ, 2013)*  même unité, même méthode : de faux profils LinkedIn (_Quantum Insert_) ont piégé des ingénieurs réseau pour atteindre directement les routeurs gérant le trafic international, sans passer par le réseau bureautique @intercept_belgacom_2014, @enwiki:1359622831. \ \
+*Belgacom (GCHQ, 2013)*  même unité, même méthode : de faux profils LinkedIn (_Quantum Insert_) ont piégé des ingénieurs réseau pour atteindre directement les routeurs gérant le trafic international, sans passer par le réseau bureautique. @intercept_belgacom_2014 @enwiki:1359622831 \ \
 
 == Méthodes communes d'attaque
 *Supply-chain - dépendances orphelines et paquets vérolés*
@@ -155,15 +155,20 @@ Par exemple en 2017 sur PostgreSQL avec :
 
 *Reconnaissance, Weaponizing & Delivery*
 
-On retient ici l'hypothèse phishing, cohérente avec le précédent Gemalto détaillé en Partie 1 : un employé du réseau bureautique de SimBuild est compromis via une pièce jointe piégée.
+L'ypothèse du phising est la plus probable si faite sur les employé travaillant dans la partie ingénierie ; les réseaux doivent être ségrégés afin d'empécher un attaquant d'avoir accès à l'intégralité du réseau en compromettant une seule machine (ISO 27002 *8.22*). Hors, les informations de sécurité sont préparées sur les postes de travail. Si cest machines ont accès à internet (il est possible que ces machines soient gardées hors ligne comme le font certaines entreprises), alors elles sont suceptible à une attaque, et le meilleur candidat pour l'attaque serait la même méthoque que utilisée sur Belagcom. @enwiki:1359622831
+
+Une deuxième hypothèse serait un appareil malicieux introduit à l'insu des employés. Les systèmes réalisant la gravure sur les cartes doit communisuer avec un serveur spécifique, cependant, le réseau employé est probablement très hermétique ; une attaque par le réseau est probablement en vain (règles de parefeux strictes _eg._ allowed subnet, allowed ports, allowed protocols, VPN, ...). Une attaque comme Stuxnet est également envisegeable.
+
 
 *Exploitation*
 
-Contrairement au cas réel de Gemalto, l'application de préparation des éléments de sécurité et le client lourd relié à la base de données ne sont pas isolés du réseau bureautique compromis #sym.arrow.r l'attaquant peut donc progresser au-delà du seul réseau bureautique.
+
 
 *Installation*
 
 Pour exfiltrer des clefs sur plusieurs lots de cartes SIM, l'attaquant doit maintenir un accès dans la durée, par exemple au niveau du client lourd relié à la base de données et aux serveurs bureautiques. Le cas SUNBURST (SolarWinds, 2020) illustre une installation particulièrement furtive : le backdoor était injecté dans une DLL signée du logiciel légitime, lui permettant de survivre aux mises à jour @cisa_aa20352a. Ces DLL frauduleux avaient pu être signé grace aux clef volées.
+
+Ces postes étant sûrement très surveillé, l'attaquant ne peut pas simplement lire les clef. C'est pourquoi il est important dans les phases précédentes d'avoir conçut un logiciel pour discrételent lire la mémoire afin de trouver les clefs par exemple, ou de trouver une faille dans les logiciels de log, ou le kernel.  
 
 *Command & Control*
 
@@ -172,6 +177,8 @@ Le canal de contrôle doit rester discret pour échapper à une éventuelle supe
 *Action on Objective*
 
 Cette dernière étape correspond à l'objet même du cas d'étude : l'exfiltration des certificats privés de chiffrement des cartes SIM, déjà illustrée par le cas Gemalto cité plus haut #sym.arrow.r les clefs dérobées permettent d'intercepter le trafic mobile sans coopération des opérateurs @noauthor_nodate_gemalto.
+
+
 
 == Déroulé 2 - défense réussie
 

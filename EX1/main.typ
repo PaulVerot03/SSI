@@ -95,7 +95,7 @@ Plusieurs vecteurs d'attaque sont envisageable :
 
 *Phishing - Gemalto (2011)*
 
-Le cas d'étude est similaire au piratage de l'entrprise GEMALTO en 2011. Où deux agences gouvernementales, la National Security Agency (EUA) et le Government Communications Headquarters (UK), se sont introduits dans les systèmes de l'entreprise Gemalto, fabricant des cartes SIM fournissant plus de 450 opérateurs telecoms dans le monde. Les attaquant avaient pour but de saisir les clef de chiffrements afin de pouvoir plus facillement espionner les échanges entre utilisateurs sur les réseaux cellulaires supposément.
+Le cas d'étude est similaire au piratage de l'entrprise GEMALTO en 2011. Où deux agences gouvernementales, la National Security Agency (USA) et le Government Communications Headquarters (UK), se sont introduits dans les systèmes de l'entreprise Gemalto, fabricant des cartes SIM fournissant plus de 450 opérateurs telecoms dans le monde. Les attaquant avaient pour but de saisir les clef de chiffrements afin de pouvoir plus facillement espionner les échanges entre utilisateurs sur les réseaux cellulaires supposément.
 
 #quote(attribution:[ Gemalto presents the findings of its investigations into the alleged hacking @noauthor_nodate_gemalto])[
   _With these stolen encryption keys, intelligence agencies can monitor mobile communications without seeking or receiving approval from telecom companies and foreign governments._]
@@ -155,20 +155,21 @@ Par exemple en 2017 sur PostgreSQL avec :
 
 *Reconnaissance, Weaponizing & Delivery*
 
-L'ypothèse du phising est la plus probable si faite sur les employé travaillant dans la partie ingénierie ; les réseaux doivent être ségrégés afin d'empécher un attaquant d'avoir accès à l'intégralité du réseau en compromettant une seule machine (ISO 27002 *8.22*). Hors, les informations de sécurité sont préparées sur les postes de travail. Si cest machines ont accès à internet (il est possible que ces machines soient gardées hors ligne comme le font certaines entreprises), alors elles sont suceptible à une attaque, et le meilleur candidat pour l'attaque serait la même méthoque que utilisée sur Belagcom. @enwiki:1359622831
+L'ypothèse du phising est la plus probable si faite sur les employé travaillant dans la partie ingénierie ; les réseaux doivent être ségrégés afin d'empécher un attaquant d'avoir accès à l'intégralité du réseau en compromettant une seule machine (ISO 27002 *8.22*). Hors, les informations de sécurité sont préparées sur les postes de travail. Si cest machines ont accès à internet (il est possible que ces machines soient gardées hors ligne comme le font certaines entreprises), alors elles sont suceptible à une attaque, et le meilleur candidat pour l'attaque serait la même méthode que utilisée sur Belagcom. @enwiki:1359622831
 
 Une deuxième hypothèse serait un appareil malicieux introduit à l'insu des employés. Les systèmes réalisant la gravure sur les cartes doit communisuer avec un serveur spécifique, cependant, le réseau employé est probablement très hermétique ; une attaque par le réseau est probablement en vain (règles de parefeux strictes _eg._ allowed subnet, allowed ports, allowed protocols, VPN, ...). Une attaque comme Stuxnet est également envisegeable.
 
 
 *Exploitation*
+Dans le cas du phishing façon Quantum Insert, l'exploitation ne demande aucune action supplémentaire de la victime : la page piégée déclenche le payload dès le chargement, via une faille navigateur ou un plugin obsolète. \ \
 
-
+Dans le cas du support USB, l'exploitation reprend le scénario Stuxnet : le fichier `.lnk` @tanguyfaivredarcier_2024_how piégé exécute du code dès l'affichage du contenu de la clef dans l'explorateur, sans que l'employé n'ait besoin d'ouvrir quoi que ce soit @enwiki:1373234009.
 
 *Installation*
 
 Pour exfiltrer des clefs sur plusieurs lots de cartes SIM, l'attaquant doit maintenir un accès dans la durée, par exemple au niveau du client lourd relié à la base de données et aux serveurs bureautiques. Le cas SUNBURST (SolarWinds, 2020) illustre une installation particulièrement furtive : le backdoor était injecté dans une DLL signée du logiciel légitime, lui permettant de survivre aux mises à jour @cisa_aa20352a. Ces DLL frauduleux avaient pu être signé grace aux clef volées.
 
-Ces postes étant sûrement très surveillé, l'attaquant ne peut pas simplement lire les clef. C'est pourquoi il est important dans les phases précédentes d'avoir conçut un logiciel pour discrételent lire la mémoire afin de trouver les clefs par exemple, ou de trouver une faille dans les logiciels de log, ou le kernel.  
+Ces postes étant sûrement très surveillé, l'attaquant ne peut pas simplement lire les clef. C'est pourquoi il est important dans les phases précédentes d'avoir conçut un logiciel pour discrétement lire la mémoire afin de trouver les clefs par exemple, ou de trouver une faille dans les logiciels de log, ou le kernel.  
 
 *Command & Control*
 

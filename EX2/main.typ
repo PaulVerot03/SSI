@@ -87,6 +87,69 @@ La norme ISO 27002 distingue contrôles préventifs, de détection et correctifs
 = ISO 27002
 La norme ISO 27002 défninit plusieurs recomendations quant à l'intégrité des données et aux relation avec les entreprises tierces contractée pour ce genre de réaslisation. 
 
+On peut isoler les éléments suivants : 
+
+== Sauvegarde des Informations
+Une simple sauvegarde des données aurais complétement annulé le problême. 
+
+La norme ISO indique : 
+#quote(attribution: [8.13 @iso27002_2022])[
+  _A topic-specific policy on backup should be established to address the organization’s data retention and information security requirements.Adequate backup facilities should be provided to ensure that all essential information and software can be recovered following an incident or failure or loss of storage media_ \
+  [...] \
+  _c)  storing the backups in a safe and secure remote location, at a sufficient distance to escape any damage from a disaster at the main site;_
+]
+
+La norme recomande d'avoir plusieurs sauvegarde placées à des lieux différents pour éviter de toutes les perdres en cas d'évènement grave (ex. tremblement de terre, innondation, ...). \
+
+ISO ne donne pas de recommendation pratique sur comment opérer ces systèmes de sauvegarde. Cependant, l'*ANSSI* @ANSSI dispose d'un guide qui détaille, de manière non technique, les meilleures pratiques quant aux sauvegardes. 
+== Changement de Gestion
+
+La source spécifique de l'incident provient d'une entreprise tierce qui vennait effectuer un service de migration. La norme décrit comment ces changements aux systèmes devraient etre oppérés. 
+#quote(attribution: [8.32  @iso27002_2022])[
+  _Introduction of new systems and major changes to existing systems should follow agreed rules and a formal process of documentation, specification, testing, quality control and managed implementation. Management responsibilities and procedures should be in place to ensure satisfactory control of all changes. \
+  Change control procedures should be documented and enforced to ensure the confidentiality, integrity and availability of information in information processing facilities and information systems, for the entire system development life cycle from the early design stages through all subsequent maintenance 
+efforts._
+]
+Ici, la norme spécifie que les changements doivent être documentés et testés.
+
+== Ségrégation des environement de developpement et production
+
+#quote(attribution: [8.31 @iso27002_2022])[
+  _Without adequate measures and procedures, developers and testers having access to production systems can introduce significant risks (e.g. unwanted modification of files or system environment, system  failure,  running  unauthorized  and  untested  code  in  production  systems,  disclosure  of confidential data, data integrity and availability issues). There is a need to maintain a known and stable environment in which to perform meaningful testing and to prevent inappropriate developer access to 
+the production environment._
+]
+== Relation fournisseur/client
+
+Note : même ayant suivi des cours de droit, je ne suis pas un expert ou même qualifié en matière de législation. J'ai donc demandé à un ami avocat de m'aider sur cette partie.
+
+L'entreprise évryenne s'expose à des actions punnitives et dédomagement. 
+Conformément au code civil ; 
+art.1217-C : l'entreprise AlphaBeta peux refuser ou suspendre l'execution des ses obligations (ici obligation de payment pour les services), exiger une réduction du prix ou demander la réparation des conséquences ainsi que resoudre le contrat.
+\
+Dans le contexte, il est probable que AlphaBeta demande une réduction du prix et suspende ses obligations le temps de restaurer les données. La startup EvryTop sera contrainte de restaurer les systèmes sans gratification. AlphaBeta a également le droit de refuser de travailler avec EvryTop, et exiger l'intervention d'une autre entreprise, à charge d'EvryTop.
+
+art.1231-3
+#quote(attribution: [art.1231-3 Code Civil])[
+  _Le débiteur n'est tenu que des dommages et intérêts qui ont été prévus ou qui pouvaient être prévus lors de la conclusion du contrat, sauf lorsque l'inexécution est due à une faute lourde ou dolosive._
+]
+Ce qui indique que les dommages éventuels devaient être prévu de le contrat signé par EvryTop et AlphaBeta, hors faude grave ou dolosive. Il faut donc determiner dans le contexte la nature de la faute.  [detailler]
+
+
+art.1170
+Toute clause qui prive de sa substance l'obligation essentielle du débiteur est réputée non écrite. 
+
+Dans le cadre de la migration de donnée, l'intégrité des données est jugée comme une obligaiton essentielle, ainsi la perte des données peut être considérée comme faute lourde (négligence).  
+
+Pour compléter le point évoqué sur art.1217-C, 
+
+voir l'arrêt du 22 octobre 1996 de la cours de Cassation
+
+
+art.1231-5
+
+Cependant, il est important de noter l'obligation de moyens contre l'obligation de resultats. Si AlphaBeta n'avait pas donné à EvryTop les moyens de faire des sauvegardes, alors la responsabilité et l'obligation de produire un resulta d'EvryTop est réduite.  
+
+Également, si les bases de données contenaient des informations personnelles, la législation impose le signalement de l'incident à la CNIL, conformément à la RGPD (art.34).
 = Analyse d'un cas réel : TSB 2018
 
 Le problême survient lorsque l'entreprise change de fournisseur de services pour cette infrastructure.  

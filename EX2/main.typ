@@ -15,20 +15,6 @@
 )
 #import "classic-evry-report/template/setup/macros.typ": *
 
-// -- Acronyms / glossary --------------------------------------------
-// https://typst.app/universe/package/glossy
-// #show: init-glossary.with(
-//   (
-//     PBL: "Problem Based Learning",
-//     web: (short: "WWW", long: "World Wide Web"),
-//   ),
-//   term-links: true,
-// )
-
-// -- Document-wide find/replace show rules ---------------------------
-// #show "naive": "naïve"
-// #show "Dijkstra's": smallcaps
-
 #show: project.with(
   meta: (
     project-group: "Master II CNS-SR",
@@ -41,19 +27,15 @@
     supervisors: "Damien PLOIX",
     //field-of-study: "",
     project-type: "", 
+    repository:"github.com/PaulVerot03/SSI",
+    note:"Le code pour génerer ce document est disponnible sur le dépôt GitHub, ainsi qu'un historique git."
   ),
   fr: (
     title: "Étude des services ISO 27002",
     theme: "Sécurité des Systèmes d'Information",
-    abstract: "",
+    abstract: "Une entreprise fictive, AlphaBeta, perd ses données de production suite à un déploiement raté chez son prestataire EvryTop. Ce document identifie les contrôles ISO 27002 qui auraient pu prévenir l'incident ou en limiter les effets, en évalue les conséquences juridiques et contractuelles, et confronte le cas à un incident réel comparable : la migration ratée de TSB Bank en 2018.",
   ),
-  // Omit `en` entirely for a French-only document, or `fr` for English-only.
-
-  lang: "fr", // "en" or "fr" -- page-numbering format etc.
-  // is-draft: true,             // skip frontmatter generation
-  // margins: (inside: 2.8cm, outside: 4.1cm),
-  // clear-double-page: false,   // clear to next odd page on chapters
-  // font: "Libertinus Serif",
+  lang: "fr",
 )
 
 #spiral()
@@ -85,13 +67,13 @@ La norme ISO 27002 distingue contrôles préventifs, de détection et correctifs
 
 
 = ISO 27002
-La norme ISO 27002 défninit plusieurs recomendations quant à l'intégrité des données et aux relation avec les entreprises tierces contractée pour ce genre de réaslisation. 
+La norme ISO 27002 défninit plusieurs contrôles quant à l'intégrité des données et aux relation avec les entreprises tierces contractée pour ce genre de réaslisation. 
 
 On peut isoler les éléments suivants : 
 
 == Sauvegarde des Informations
 Une simple sauvegarde des données aurais complétement annulé le problême. 
-
+\ \
 La norme ISO indique : 
 #quote(attribution: [8.13 @iso27002_2022])[
   _A topic-specific policy on backup should be established to address the organization’s data retention and information security requirements.Adequate backup facilities should be provided to ensure that all essential information and software can be recovered following an incident or failure or loss of storage media_ \
@@ -100,7 +82,7 @@ La norme ISO indique :
 ]
 
 La norme recomande d'avoir plusieurs sauvegarde placées à des lieux différents pour éviter de toutes les perdres en cas d'évènement grave (ex. tremblement de terre, innondation, ...). \
-
+\ \
 ISO ne donne pas de recommendation pratique sur comment opérer ces systèmes de sauvegarde. Cependant, l'*ANSSI* @ANSSI dispose d'un guide qui détaille, de manière non technique, les meilleures pratiques quant aux sauvegardes. 
 == Changement de Gestion
 
@@ -120,7 +102,7 @@ Le manque de séparation entre les environements de productions et developpement
 the production environment._
 ]
 
-Si EvryTop avait testé la migration sur un environnement de staging, la corruption aurait été détectée avant d'atteindre les données réelles des VRP.
+Si EvryTop avait testé la migration sur un environnement de staging, la corruption aurait été détectée avant d'atteindre les données réelles des VRP. \ \
 
 8.31 est la condition préalable à ce que 8.29 et 8.32 soient réellement efficaces. Sans séparation, il n'y a pas d'environnement où tester.
 #quote(attribution: [ISO 27002 @iso27002_2022])[
@@ -149,15 +131,15 @@ Concernant l'étendue des dommages-intérêts :
 #quote(attribution: [art.1231-3 Code Civil @codecivil])[
   _Le débiteur n'est tenu que des dommages et intérêts qui ont été prévus ou qui pouvaient être prévus lors de la conclusion du contrat, sauf lorsque l'inexécution est due à une faute lourde ou dolosive._
 ]
-EvryTop ne serait donc tenue que des dommages prévisibles au moment de la signature du contrat, sauf faute lourde ou dolosive #footnote[Selon la jurisprudence de la Cour de cassation, la faute dolosive suppose que le débiteur choisisse délibérément de ne pas exécuter son obligation, peu important qu'il ait ou non cherché à nuire à son cocontractant — à distinguer de la simple négligence, même grave.]. La question centrale devient alors la qualification de la faute : une erreur de configuration isolée relève de la faute ordinaire, tandis qu'une absence totale et connue de politique de sauvegarde pourrait être requalifiée en faute lourde, écartant le plafond de prévisibilité. Illustrant l'intérêt pratique du point 8.13 : une politique de sauvegarde formalisée et documentée est précisément ce qui permet à EvryTop de rester dans le spectre de la faute ordinaire plutôt que de la faute lourde.
-\
+EvryTop ne serait donc tenue que des dommages prévisibles au moment de la signature du contrat, sauf faute lourde ou dolosive #footnote[Selon la jurisprudence de la Cour de cassation, la faute dolosive suppose que le débiteur choisisse délibérément de ne pas exécuter son obligation, peu important qu'il ait ou non cherché à nuire à son cocontractant.]. La question centrale devient alors la qualification de la faute : une erreur de configuration isolée relève de la faute ordinaire, tandis qu'une absence totale et connue de politique de sauvegarde pourrait être requalifiée en faute lourde, écartant le plafond de prévisibilité. Illustrant l'intérêt pratique du point 8.13 : une politique de sauvegarde formalisée et documentée est précisément ce qui permet à EvryTop de rester dans le spectre de la faute ordinaire plutôt que de la faute lourde.
+\ \
 
 Cette qualification devient déterminante si le contrat comporte une clause limitative de responsabilité. L'art. 1170 du Code civil indique :
 #quote(attribution: [art.1170 Code Civil @codecivil])[
   _Toute clause qui prive de sa substance l'obligation essentielle du débiteur est réputée non écrite._
 ]
 \
-Ce principe est issu de l'arrêt Chronopost (Cass. com., 22 octobre 1996, n°93-18632) : un prestataire qui s'engage sur un service précis ne peut prévoire une clause qui viderait cet engagement de tout contenu. Si le contrat EvryTop-AlphaBeta comportait une clause exonérant totalement EvryTop de toute responsabilité en cas de perte de données, cette clause serait réputée non écrite dès lors que l'intégrité des données constitue l'obligation essentielle du service commandé. Même en l'absence de clause explicite, les garanties ACID pourraient s'imposer au contrat comme usage professionnel, à condition qu'un tel usage soit reconnu comme notoire, constant et général. 
+Ce principe est issu de l'arrêt Chronopost (Cass. com., 22 octobre 1996, n°93-18632)@chronopost_1996 : un prestataire qui s'engage sur un service précis ne peut prévoire une clause qui viderait cet engagement de tout contenu. Si le contrat EvryTop-AlphaBeta comportait une clause exonérant totalement EvryTop de toute responsabilité en cas de perte de données, cette clause serait réputée non écrite dès lors que l'intégrité des données constitue l'obligation essentielle du service commandé. Même en l'absence de clause explicite, les garanties ACID pourraient s'imposer au contrat comme usage professionnel, à condition qu'un tel usage soit reconnu comme notoire, constant et général. 
 \
 Note : je n'ai pas trouvé suffisement de contexte juridique pour ettayer que les garanties ACID soient comptés comme «non-écrites». 
 
@@ -167,22 +149,24 @@ Note : je n'ai pas trouvé suffisement de contexte juridique pour ettayer que le
 Où « l'usage » fait référence aux habitudes professionnelles ou locales d'un secteur s'imposant aux parties sans qu'il soit nécessaire de les inscrire.
 \
 \
-Il faut néanmoins nuancer la responsabilité d'EvryTop selon la nature de son obligation de sauvegarde. L'obligation de moyens (mettre en eouvre des mesures raisonnables) ou obligation de résultat (garantir l'absence de perte). Une qualification qui relève de l'interprétation du contrat ; l'art. 1231-1 du Code civil, qui conditionne la responsabilité du débiteur à l'absence de cause étrangère justifiant l'inexécution. Si AlphaBeta n'avait pas donné à EvryTop les moyens nécessaires à la mise en place de sauvegardes (accès, infrastructure, budget dédié), sa propre négligence pourrait être retenue comme cause d'exonération partielle.
+Il faut néanmoins nuancer la responsabilité d'EvryTop selon la nature de son obligation de sauvegarde. L'obligation de moyens (mettre en eouvre des mesures raisonnables) ou obligation de résultat (garantir l'absence de perte). Ce qui relève de l'interprétation du contrat ; l'art. 1231-1 du Code civil, qui conditionne la responsabilité du débiteur à l'absence de cause étrangère justifiant l'inexécution. Si AlphaBeta n'avait pas donné à EvryTop les moyens nécessaires à la mise en place de sauvegardes (accès, infrastructure, budget dédié), sa propre négligence pourrait être retenue comme cause d'exonération partielle.
 \
 \
-Enfin, si les données corrompues comportaient des données à caractère personnel (ce qui est probable, la géolocalisation des VRP semble en constituer une),  AlphaBeta serait alors tenue de notifier la CNIL sous 72h (art. 33 RGPD) et, si le risque pour les personnes concernées est élevé, d'en informer directement les VRP concernés (art. 34 RGPD).
+Enfin, si les données corrompues comportaient des données à caractère personnel (ce qui est probable, la géolocalisation des VRP semble en constituer une),  AlphaBeta serait alors tenue de notifier la CNIL sous 72h (art. 33 RGPD @rgpd_2016).
 
 = Analyse d'un cas réel : TSB 2018
 Un cas similaire a eut lieu en 2018 au Royaume-Uni (je n'ai pas trouvé de cas récent similaire en France, ce qui aurait été beaucoup plus intéressant au regard de la partie juridique précédente), où une migration des données des clients s'est mal passé résultant en une panne de plusieurs services pendant plusieurs mois. 
-
+\ \
 La banque TSB voulait changer de plateforme, et a donc du migrer les données, cependant, bien que la migration se soit bien passée, des avaries techniques sont immédiatement apparues sur les nouveaux systèmes. Affectant plus de 5 millions de clients, il à fallut a TSB plus de deux trimestres pour rétablir complétement leurs services.
 
 #quote(attribution: [BBC - TSB accused of 'dreadful response' to meltdown])[
 _Two weeks after commencement of the migration, failures were still being reported with services such as the online banking application giving internal SQL database-related errors. Payment difficulties, particularly with business and mortgage accounts continued into a fourth week_]
 
+\ \
 Les données étaient intact mais innaccessibles. 
-
+\ \
 Cette panne a couté plus de £32.7m en dedomagements aux clients, £18.9m en ammendes par la Prudential Regulation Authority, et £29.7m en ammendes par la Financial Conduct Authority, élevant le coût total de la migration à £81.3m. @FCA_tsb
+\ \
 
 La différence avec le cas AlphaBeta est qu'il existait des sauvegarde de données qui ont permis de rétablir l'accès aux services.
 

@@ -5,6 +5,7 @@
   mainmatter,
   project,
   smallprint,
+  spiral,
 )
 
 #import "classic-evry-report/template/setup/macros.typ": *
@@ -44,7 +45,7 @@
 
 )
 
-
+#spiral()
 #set heading(numbering: "1.")
 #show: mainmatter.with(skip-double: false)
 #outline()

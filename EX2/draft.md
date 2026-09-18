@@ -2,7 +2,7 @@
 - contexte
 - résumé des failles ? 
 - comparaison avec ISO 27002
-- scénario où tout est en ordre
+- scénario réel
 
 
 1\ 

@@ -31,7 +31,7 @@
 
 #show: project.with(
   meta: (
-    project-group: "",
+    project-group: "Master II CNS-SR",
     participants: (
       "Paul VEROT",
     ),
@@ -39,20 +39,13 @@
       "20212888@etud.univ-evry.fr","pauljeanlouisverot@protonmail.com"
     ),
     supervisors: "Damien PLOIX",
-    // field-of-study: "Computer Science",
+    //field-of-study: "",
     project-type: "", 
   ),
-
-  en: (
-    title: "",
-    theme: "",
-    abstract: [],
-  ),
-
   fr: (
     title: "Étude des services ISO 27002",
     theme: "Sécurité des Systèmes d'Information",
-    abstract: [],
+    abstract: "",
   ),
   // Omit `en` entirely for a French-only document, or `fr` for English-only.
 
@@ -64,6 +57,7 @@
 )
 
 #spiral()
+#set quote(block: true)
 #set heading(numbering: "1.")
 #show: mainmatter.with(skip-double: false)
 #outline()
@@ -81,6 +75,26 @@ Pour corriger le problème, il a été demandé à l'ensemble des vendeurs de r�
 Exercice :
 Expliquez si les services ISO 27002 étudiés en cours auraient permis (ou pas) d'empêcher la situation de se produire ou d'en limiter les effets.
 
+== Question
+Le déploiement d'une nouvelle version a corrompu les données de production, sans possibilité de restauration : les vendeurs ont dû ressaisir leurs données. L'incident touche l'intégrité et la disponibilité des données ; pas la confidentialité. Dont l'origine est les pratiques de changement, de test et de sauvegarde autour du déploiement.
+
+La norme ISO 27002 distingue contrôles préventifs, de détection et correctifs. On peut donc diviser la question en deux :
+
+- Quels contrôles auraient empêché la corruption des données ?
+- Quels contrôles auraient limité ses effets une fois survenue ?
+
+
+= ISO 27002
+La norme ISO 27002 défninit plusieurs recomendations quant à l'intégrité des données et aux relation avec les entreprises tierces contractée pour ce genre de réaslisation. 
+
+= Analyse d'un cas réel : TSB 2018
+
+Le problême survient lorsque l'entreprise change de fournisseur de services pour cette infrastructure.  
+
+
+
+
+#bibliography("ref.bib", title:"Références", full:true)
 // -- Fractal chapter title pages --------------------------------------
 // Call before your first heading to turn every level-1 heading (=) into
 // its own title page with a growing Heighway dragon-curve motif.

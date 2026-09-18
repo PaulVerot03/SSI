@@ -49,7 +49,7 @@
   ),
   // Omit `en` entirely for a French-only document, or `fr` for English-only.
 
-  lang: "en", // "en" or "fr" -- page-numbering format etc.
+  lang: "fr", // "en" or "fr" -- page-numbering format etc.
   // is-draft: true,             // skip frontmatter generation
   // margins: (inside: 2.8cm, outside: 4.1cm),
   // clear-double-page: false,   // clear to next odd page on chapters
@@ -114,80 +114,85 @@ Ici, la norme spécifie que les changements doivent être documentés et testés
 
 == Ségrégation des environement de developpement et production
 
+Le manque de séparation entre les environements de productions et developpement est probablement la source de l'ireversabilité de la coruption. Ce qui aurait du être testé a été déployé en production.
 #quote(attribution: [8.31 @iso27002_2022])[
   _Without adequate measures and procedures, developers and testers having access to production systems can introduce significant risks (e.g. unwanted modification of files or system environment, system  failure,  running  unauthorized  and  untested  code  in  production  systems,  disclosure  of confidential data, data integrity and availability issues). There is a need to maintain a known and stable environment in which to perform meaningful testing and to prevent inappropriate developer access to 
 the production environment._
 ]
-== Relation fournisseur/client
 
-Note : même ayant suivi des cours de droit, je ne suis pas un expert ou même qualifié en matière de législation. J'ai donc demandé à un ami avocat de m'aider sur cette partie.
+Si EvryTop avait testé la migration sur un environnement de staging, la corruption aurait été détectée avant d'atteindre les données réelles des VRP.
 
-L'entreprise évryenne s'expose à des actions punnitives et dédomagement. 
-Conformément au code civil ; 
-art.1217-C : l'entreprise AlphaBeta peux refuser ou suspendre l'execution des ses obligations (ici obligation de payment pour les services), exiger une réduction du prix ou demander la réparation des conséquences ainsi que resoudre le contrat.
+8.31 est la condition préalable à ce que 8.29 et 8.32 soient réellement efficaces. Sans séparation, il n'y a pas d'environnement où tester.
+#quote(attribution: [ISO 27002 @iso27002_2022])[
+  *8.29*_Security testing processes should be defined and implemented in the development life cycle._ \
+  *8.31*_Development, testing and production environments should be separated and secured._ \ 
+  *8.32*_Changes to information processing facilities and information systems should be subject to change management procedures._
+]
+
+= Aspect Légal
+
+#underline[Avant-propos] : bien qu'ayant suivi des cours de droit, je ne suis ni expert ni qualifié en matière de législation ; j'ai demandé à un ami avocat de relire cette partie.
 \
-Dans le contexte, il est probable que AlphaBeta demande une réduction du prix et suspende ses obligations le temps de restaurer les données. La startup EvryTop sera contrainte de restaurer les systèmes sans gratification. AlphaBeta a également le droit de refuser de travailler avec EvryTop, et exiger l'intervention d'une autre entreprise, à charge d'EvryTop.
+\
+\
+L'entreprise EvryTop s'expose à des sanctions contractuelles et à une obligation de réparation.
+\
+\
 
-art.1231-3
-#quote(attribution: [art.1231-3 Code Civil])[
+Conformément à l'art. 1217 du Code civil, AlphaBeta peut refuser ou suspendre l'exécution de ses propres obligations (ici, le paiement des prestations), exiger une réduction du prix, ou demander la réparation des conséquences de l'inexécution, ces sanctions étant cumulables entre elles.
+\
+\
+Dans ce contexte, il est probable qu'AlphaBeta suspende ses paiements le temps de la restauration et exige une réduction de prix ; EvryTop resterait tenue de restaurer les systèmes sans contrepartie financière additionnelle. AlphaBeta conserve également la possibilité de résilier le contrat et de faire intervenir un autre prestataire, aux frais d'EvryTop.
+
+\
+Concernant l'étendue des dommages-intérêts :
+#quote(attribution: [art.1231-3 Code Civil @codecivil])[
   _Le débiteur n'est tenu que des dommages et intérêts qui ont été prévus ou qui pouvaient être prévus lors de la conclusion du contrat, sauf lorsque l'inexécution est due à une faute lourde ou dolosive._
 ]
-Ce qui indique que les dommages éventuels devaient être prévu de le contrat signé par EvryTop et AlphaBeta, hors faude grave ou dolosive. Il faut donc determiner dans le contexte la nature de la faute.  [detailler]
+EvryTop ne serait donc tenue que des dommages prévisibles au moment de la signature du contrat, sauf faute lourde ou dolosive #footnote[Selon la jurisprudence de la Cour de cassation, la faute dolosive suppose que le débiteur choisisse délibérément de ne pas exécuter son obligation, peu important qu'il ait ou non cherché à nuire à son cocontractant — à distinguer de la simple négligence, même grave.]. La question centrale devient alors la qualification de la faute : une erreur de configuration isolée relève de la faute ordinaire, tandis qu'une absence totale et connue de politique de sauvegarde pourrait être requalifiée en faute lourde, écartant le plafond de prévisibilité. Illustrant l'intérêt pratique du point 8.13 : une politique de sauvegarde formalisée et documentée est précisément ce qui permet à EvryTop de rester dans le spectre de la faute ordinaire plutôt que de la faute lourde.
+\
 
+Cette qualification devient déterminante si le contrat comporte une clause limitative de responsabilité. L'art. 1170 du Code civil indique :
+#quote(attribution: [art.1170 Code Civil @codecivil])[
+  _Toute clause qui prive de sa substance l'obligation essentielle du débiteur est réputée non écrite._
+]
+\
+Ce principe est issu de l'arrêt Chronopost (Cass. com., 22 octobre 1996, n°93-18632) : un prestataire qui s'engage sur un service précis ne peut prévoire une clause qui viderait cet engagement de tout contenu. Si le contrat EvryTop-AlphaBeta comportait une clause exonérant totalement EvryTop de toute responsabilité en cas de perte de données, cette clause serait réputée non écrite dès lors que l'intégrité des données constitue l'obligation essentielle du service commandé. Même en l'absence de clause explicite, les garanties ACID pourraient s'imposer au contrat comme usage professionnel, à condition qu'un tel usage soit reconnu comme notoire, constant et général. 
+\
+Note : je n'ai pas trouvé suffisement de contexte juridique pour ettayer que les garanties ACID soient comptés comme «non-écrites». 
 
-art.1170
-Toute clause qui prive de sa substance l'obligation essentielle du débiteur est réputée non écrite. 
+#quote(attribution: [art.1194 @codecivil])[
+  _Les contrats obligent non seulement à ce qui y est exprimé, mais encore à toutes les suites que leur donnent l'équité, l'usage ou la loi. _
+]
+Où « l'usage » fait référence aux habitudes professionnelles ou locales d'un secteur s'imposant aux parties sans qu'il soit nécessaire de les inscrire.
+\
+\
+Il faut néanmoins nuancer la responsabilité d'EvryTop selon la nature de son obligation de sauvegarde. L'obligation de moyens (mettre en eouvre des mesures raisonnables) ou obligation de résultat (garantir l'absence de perte). Une qualification qui relève de l'interprétation du contrat ; l'art. 1231-1 du Code civil, qui conditionne la responsabilité du débiteur à l'absence de cause étrangère justifiant l'inexécution. Si AlphaBeta n'avait pas donné à EvryTop les moyens nécessaires à la mise en place de sauvegardes (accès, infrastructure, budget dédié), sa propre négligence pourrait être retenue comme cause d'exonération partielle.
+\
+\
+Enfin, si les données corrompues comportaient des données à caractère personnel (ce qui est probable, la géolocalisation des VRP semble en constituer une),  AlphaBeta serait alors tenue de notifier la CNIL sous 72h (art. 33 RGPD) et, si le risque pour les personnes concernées est élevé, d'en informer directement les VRP concernés (art. 34 RGPD).
 
-Dans le cadre de la migration de donnée, l'intégrité des données est jugée comme une obligaiton essentielle, ainsi la perte des données peut être considérée comme faute lourde (négligence).  
-
-Pour compléter le point évoqué sur art.1217-C, 
-
-voir l'arrêt du 22 octobre 1996 de la cours de Cassation
-
-
-art.1231-5
-
-Cependant, il est important de noter l'obligation de moyens contre l'obligation de resultats. Si AlphaBeta n'avait pas donné à EvryTop les moyens de faire des sauvegardes, alors la responsabilité et l'obligation de produire un resulta d'EvryTop est réduite.  
-
-Également, si les bases de données contenaient des informations personnelles, la législation impose le signalement de l'incident à la CNIL, conformément à la RGPD (art.34).
 = Analyse d'un cas réel : TSB 2018
+Un cas similaire a eut lieu en 2018 au Royaume-Uni (je n'ai pas trouvé de cas récent similaire en France, ce qui aurait été beaucoup plus intéressant au regard de la partie juridique précédente), où une migration des données des clients s'est mal passé résultant en une panne de plusieurs services pendant plusieurs mois. 
 
-Le problême survient lorsque l'entreprise change de fournisseur de services pour cette infrastructure.  
+La banque TSB voulait changer de plateforme, et a donc du migrer les données, cependant, bien que la migration se soit bien passée, des avaries techniques sont immédiatement apparues sur les nouveaux systèmes. Affectant plus de 5 millions de clients, il à fallut a TSB plus de deux trimestres pour rétablir complétement leurs services.
 
+#quote(attribution: [BBC - TSB accused of 'dreadful response' to meltdown])[
+_Two weeks after commencement of the migration, failures were still being reported with services such as the online banking application giving internal SQL database-related errors. Payment difficulties, particularly with business and mortgage accounts continued into a fourth week_]
 
+Les données étaient intact mais innaccessibles. 
 
+Cette panne a couté plus de £32.7m en dedomagements aux clients, £18.9m en ammendes par la Prudential Regulation Authority, et £29.7m en ammendes par la Financial Conduct Authority, élevant le coût total de la migration à £81.3m. @FCA_tsb
+
+La différence avec le cas AlphaBeta est qu'il existait des sauvegarde de données qui ont permis de rétablir l'accès aux services.
+
+= Conclusion
+Pour répondre au deux questions posées : 
+\
+\
+Empêcher la corruption relève des trois contrôles qui agissent en amont du déploiement : la séparation des environnements aurait fourni un espace de test représentatif de la production ; les tests de sécurité auraient validé la migration avant sa mise en service ; la gestion du changement aurait imposé une procédure documentée, avec plan de retour arrière, avant tout déploiement majeur. Ces trois contrôles agissent ensemble et leur absence conjointe est la cause la plus probable de l'incident.
+\
+\
+La sauvegarde permet de limiter les effets à posteriori. C'est précisément ce qui différencie AlphaBeta du cas TSB analysé plus loin. TSB a subi une migration tout aussi ratée, mais disposait de sauvegardes fonctionnelles : les données sont restées intactes, seule leur disponibilité a été affectée le temps de la restauration. AlphaBeta, faute de sauvegarde testée, a perdu les données elles-mêmes, rendant la ressaisie manuelle inévitable.
 
 #bibliography("ref.bib", title:"Références", full:true)
-// -- Fractal chapter title pages --------------------------------------
-// Call before your first heading to turn every level-1 heading (=) into
-// its own title page with a growing Heighway dragon-curve motif.
-// #spiral()
-// #spiral(false) // explicitly off (same as not calling it)
-
-// #outline(depth: 2)
-// #note-outline()
-
-// -- Front matter: preface, introduction (no chapter numbers) ---------
-// #show: mainmatter
-// #include "chapters/introduction.typ"
-// = Preface
-// #lorem(100)
-
-// -- Chapters: numbered "Chapter 1" / "Chapitre 1" ---------------------
-// #show: chapters
-// #include "chapters/analysis.typ"
-// #include "chapters/implementation.typ"
-
-// -- Back matter: conclusion, references (chapter numbers removed) ----
-// #show: backmatter
-// #include "chapters/conclusion.typ"
-// #glossary(title: "List of Acronyms")
-// #bibliography("references.bib", title: "References")
-
-// -- Appendices: numbered "Appendix A" / "Annexe A" --------------------
-// #show: appendix
-// #include "appendices/code.typ"
-
-// `mainmatter`, `chapters`, `backmatter` and `appendix` each also take:
-//   skip-double: false   -- skip to next page only, not next odd page
-//   lang: "fr"            -- override the language for just this section
